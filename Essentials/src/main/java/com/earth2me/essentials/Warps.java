@@ -56,12 +56,12 @@ public class Warps implements IConf, net.ess3.api.IWarps {
     public Location getWarp(final String warp) throws WarpNotFoundException {
         final EssentialsConfiguration conf = warpPoints.get(new StringIgnoreCase(warp));
         if (conf == null) {
-            throw new WarpNotFoundException();
+            throw new WarpNotFoundException(warp);
         }
 
         final Location loc = conf.getLocation(null).location();
         if (loc == null) {
-            throw new WarpNotFoundException();
+            throw new WarpNotFoundException(warp);
         }
         return loc;
     }
@@ -96,7 +96,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
     public UUID getLastOwner(final String warp) throws WarpNotFoundException {
         final EssentialsConfiguration conf = warpPoints.get(new StringIgnoreCase(warp));
         if (conf == null) {
-            throw new WarpNotFoundException();
+            throw new WarpNotFoundException(warp);
         }
         UUID uuid = null;
         try {
@@ -110,7 +110,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
     public void removeWarp(final String name) throws Exception {
         final EssentialsConfiguration conf = warpPoints.get(new StringIgnoreCase(name));
         if (conf == null) {
-            throw new TranslatableException("warpNotExist");
+            throw new WarpNotFoundException(name);
         }
         if (!conf.getFile().delete()) {
             throw new TranslatableException("warpDeleteError");
