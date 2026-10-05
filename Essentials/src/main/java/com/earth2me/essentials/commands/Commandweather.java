@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.WorldUtil;
 import com.google.common.collect.Lists;
 import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
@@ -49,7 +50,7 @@ public class Commandweather extends EssentialsCommand {
         }
 
         final boolean isStorm = args[1].equalsIgnoreCase("storm");
-        final World world = server.getWorld(args[0]);
+        final World world = WorldUtil.getWorld(server, args[0]);
         if (world == null) {
             throw new TranslatableException("weatherInvalidWorld", args[0]);
         }

@@ -1,5 +1,6 @@
 package com.earth2me.essentials.config.entities;
 
+import com.earth2me.essentials.utils.WorldUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -12,6 +13,7 @@ import java.util.UUID;
 public class LazyLocation {
     private String world;
     private String worldName;
+    private String worldKey;
     private final double x;
     private final double y;
     private final double z;
@@ -19,8 +21,13 @@ public class LazyLocation {
     private final float pitch;
 
     public LazyLocation(String worldId, String worldName, double x, double y, double z, float yaw, float pitch) {
+        this(worldId, worldName, null, x, y, z, yaw, pitch);
+    }
+
+    public LazyLocation(String worldId, String worldName, String worldKey, double x, double y, double z, float yaw, float pitch) {
         this.world = worldId;
         this.worldName = worldName;
+        this.worldKey = worldKey;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -34,6 +41,10 @@ public class LazyLocation {
 
     public String worldName() {
         return worldName;
+    }
+
+    public String worldKey() {
+        return worldKey;
     }
 
     public double x() {
@@ -57,24 +68,26 @@ public class LazyLocation {
     }
 
     public Location location() {
-        if (this.world == null || this.world.isEmpty()) {
-            return null;
-        }
-
         World world = null;
 
-        try {
-            final UUID worldId = UUID.fromString(this.world);
-            world = Bukkit.getWorld(worldId);
-        } catch (IllegalArgumentException ignored) {
+        if (this.world != null && !this.world.isEmpty()) {
+            try {
+                final UUID worldId = UUID.fromString(this.world);
+                world = Bukkit.getWorld(worldId);
+            } catch (IllegalArgumentException ignored) {
+            }
         }
 
         if (world == null) {
-            world = Bukkit.getWorld(this.world);
+            world = WorldUtil.getWorldByKey(Bukkit.getServer(), this.worldKey);
         }
 
-        if (world == null && this.worldName != null && !this.worldName.isEmpty()) {
-            world = Bukkit.getWorld(this.worldName);
+        if (world == null) {
+            world = WorldUtil.getWorld(Bukkit.getServer(), this.world);
+        }
+
+        if (world == null) {
+            world = WorldUtil.getWorld(Bukkit.getServer(), this.worldName);
         }
 
         if (world == null) {
@@ -83,12 +96,13 @@ public class LazyLocation {
 
         this.world = world.getUID().toString();
         this.worldName = world.getName();
+        this.worldKey = WorldUtil.getKey(world);
 
         return new Location(world, x, y, z, yaw, pitch);
     }
 
     public static LazyLocation fromLocation(final Location location) {
         //noinspection ConstantConditions
-        return new LazyLocation(location.getWorld().getUID().toString(), location.getWorld().getName(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+        return new LazyLocation(location.getWorld().getUID().toString(), location.getWorld().getName(), WorldUtil.getKey(location.getWorld()), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
     }
 }

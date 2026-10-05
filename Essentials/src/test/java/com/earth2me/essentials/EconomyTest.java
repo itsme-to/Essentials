@@ -25,7 +25,7 @@ public class EconomyTest {
 
     @BeforeEach
     void setUp() {
-        server = MockBukkit.mock();
+        server = TestWorlds.mockServer();
         Essentials.TESTING = true;
         ess = MockBukkit.load(Essentials.class);
 

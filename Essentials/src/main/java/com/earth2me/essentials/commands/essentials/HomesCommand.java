@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands.essentials;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.commands.EssentialsTreeNode;
+import com.earth2me.essentials.utils.WorldUtil;
 import com.google.common.collect.Lists;
 import net.ess3.api.TranslatableException;
 import org.bukkit.Bukkit;
@@ -55,7 +56,8 @@ public class HomesCommand extends EssentialsTreeNode {
                 break;
             case "delete":
                 final boolean filterByWorld = args.length >= 2;
-                if (filterByWorld && Bukkit.getWorld(args[1]) == null) {
+                final World targetWorld = filterByWorld ? WorldUtil.getWorld(ess.getServer(), args[1]) : null;
+                if (filterByWorld && targetWorld == null) {
                     throw new TranslatableException("invalidWorld");
                 }
                 if (filterByWorld) {
@@ -72,7 +74,7 @@ public class HomesCommand extends EssentialsTreeNode {
                         for (String homeName : user.getHomes()) {
                             try {
                                 final Location home = user.getHome(homeName);
-                                if (!filterByWorld || home != null && home.getWorld() != null && home.getWorld().getName().equals(args[1])) {
+                                if (!filterByWorld || home != null && targetWorld.equals(home.getWorld())) {
                                     user.delHome(homeName);
                                 }
                             } catch (Exception e) {

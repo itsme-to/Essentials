@@ -23,7 +23,7 @@ public class UserTest {
 
     @BeforeEach
     public void setUp() {
-        this.server = MockBukkit.mock();
+        this.server = TestWorlds.mockServer();
         Essentials.TESTING = true;
         ess = MockBukkit.load(Essentials.class);
         base1 = server.addPlayer("testPlayer1");

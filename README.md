@@ -38,6 +38,24 @@ however, have some new requirements:
 
 ## Support
 
+### World identifiers on Paper 26.1+
+
+This fork accepts explicit dimension keys such as `minecraft:overworld`, `minecraft:the_nether`,
+`minecraft:the_end`, and custom keys such as `example:dungeons/ice` wherever commands resolve a world
+(`/world`, `/tppos`, `/time`, console `/weather`, and `/essentials homes delete`). Existing world names
+remain valid, and `/world` and `/tppos` retain their numeric world selectors. Permission nodes still use Bukkit world names.
+
+Newly saved locations (homes, warps, jails, spawn points, and back locations) include `world-key` alongside
+`world` (UUID) and `world-name`. Loading prefers the UUID, then the saved key, then the legacy world/name
+fields. Old location files remain readable; a namespaced key is also accepted in the existing `world` field.
+Only loaded worlds are resolved. No dimension is inferred from a folder name or suffix.
+
+Paper handles the [26.1 world storage migration](https://papermc.io/news/26-1/); this plugin does not move
+or convert Minecraft world files. If an old location has neither a valid UUID nor a matching world name,
+set its `world-key` to the intended loaded dimension before reloading the configuration. Existing files
+are not bulk-rewritten. Back up the server before upgrading; world conversion cannot be undone by
+downgrading the plugin. This identifier support does not guarantee compatibility with future server API changes.
+
 Need help with using EssentialsX? Join the [MOSS Discord community](https://discord.gg/casfFyh) to ask for help and discuss EssentialsX.
 
 If you need to report a bug or want to suggest a new feature, you can [open an issue on GitHub](https://github.com/EssentialsX/Essentials/issues/new/choose).

@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.adventure.AdventureUtil;
 import com.earth2me.essentials.utils.DescParseTickFormat;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.WorldUtil;
 import com.google.common.collect.Lists;
 import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
@@ -139,8 +140,8 @@ public class Commandtime extends EssentialsCommand {
             return worlds;
         }
 
-        // Try to find the world with name = selector
-        final World world = server.getWorld(selector);
+        // Try to find the world by name or namespaced key.
+        final World world = WorldUtil.getWorld(server, selector);
         if (world != null) {
             worlds.add(world);
         } else if (selector.equalsIgnoreCase("*") || selector.equalsIgnoreCase("all")) { // If that fails, Is the argument something like "*" or "all"?

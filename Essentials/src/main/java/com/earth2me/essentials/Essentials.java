@@ -49,6 +49,7 @@ import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.ModernPaperEnvironment;
 import com.earth2me.essentials.utils.PasteUtil;
 import com.earth2me.essentials.utils.VersionUtil;
+import com.earth2me.essentials.utils.WorldUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.Economy;
 import com.earth2me.essentials.config.EssentialsConfiguration;
@@ -1147,7 +1148,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 return getServer().getWorlds().get(worldId);
             }
         }
-        return getServer().getWorld(name);
+        return WorldUtil.getWorld(getServer(), name);
     }
 
     @Override
